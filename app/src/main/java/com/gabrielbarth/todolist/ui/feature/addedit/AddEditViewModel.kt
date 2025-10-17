@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class AddEditViewModel(
+    private val id: Long? = null,
     private val repository: TodoRepository,
 ) : ViewModel() {
 
@@ -23,6 +24,18 @@ class AddEditViewModel(
 
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
+
+    init {
+        id?.let { todoId ->
+            viewModelScope.launch {
+                val todo = repository.getById(todoId)
+                todo?.let {
+                    title = it.title
+                    description = it.description
+                }
+            }
+        }
+    }
 
 
     fun onEvent(event: AddEditEvent) {
@@ -47,7 +60,7 @@ class AddEditViewModel(
                 _uiEvent.send(UiEvent.ShowSnackbar("The title cannot be empty"))
                 return@launch
             }
-            repository.insert(title, description)
+            repository.insert(title, description, id)
             _uiEvent.send(UiEvent.NavigateBack)
         }
     }
