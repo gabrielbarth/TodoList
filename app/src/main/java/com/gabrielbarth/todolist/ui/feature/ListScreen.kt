@@ -25,18 +25,25 @@ import com.gabrielbarth.todolist.ui.components.TodoItem
 import com.gabrielbarth.todolist.ui.theme.TodoListTheme
 
 @Composable
-fun ListScreen() {
-    ListContent(todos = emptyList())
+fun ListScreen(
+    navigateToAddEditScreen: (id: Long?) -> Unit,
+) {
+    ListContent(
+        todos = emptyList(),
+        onAddItemClick = navigateToAddEditScreen
+
+    )
 }
 
 @Composable
 fun ListContent(
-    todos: List<Todo>
+    todos: List<Todo>,
+    onAddItemClick: (id: Long?) -> Unit
 ) {
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = {}) {
+            FloatingActionButton(onClick = { onAddItemClick(null) }) {
                 Icon(Icons.Default.Add, contentDescription = "Add Task")
             }
         }
@@ -70,7 +77,8 @@ private fun ListContentPreview() {
                 todo1,
                 todo2,
                 todo3
-            )
+            ),
+            onAddItemClick = {}
         )
     }
 }

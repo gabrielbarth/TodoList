@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt.android)
     id("com.google.devtools.ksp")
+    kotlin("plugin.serialization") version libs.versions.kotlin
 }
 
 android {
